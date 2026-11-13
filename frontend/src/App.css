@@ -1,22 +1,31 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  font-family: 'Inter', sans-serif;
+  color: #102A43;
+  background: #dbeafe; /* Fundo azul claro atrás do cartão */
+  font-synthesis: none;
+}
 
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: #dbeafe; /* Fundo azul claro da página (atrás do cartão) */
+  min-width: 320px;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  color: #111;
 }
 
-/* Container que segura o cartão */
+button, input {
+  font: inherit;
+}
+
+/* --- CONTAINER PRINCIPAL (Split Layout) --- */
 .auth-container {
   width: 100%;
   padding: 20px;
@@ -25,22 +34,21 @@ body {
   align-items: center;
 }
 
-/* O Cartão Principal (Split Layout) */
 .auth-card-wrapper {
   display: flex;
   width: 100%;
   max-width: 1000px;
-  height: 680px; /* Altura fixa para manter as proporções */
+  height: 700px;
   background: #fff;
-  border-radius: 20px; /* Bordas bem arredondadas */
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* Sombra forte e difusa */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
-/* --- LADO ESQUERDO (Azul Escuro) --- */
+/* --- LADO ESQUERDO (Azul) --- */
 .left-panel {
   flex: 1;
-  background: linear-gradient(160deg, #0f172a 0%, #172554 100%); /* Azul escuro profundo */
+  background: linear-gradient(160deg, #0f172a 0%, #172554 100%);
   padding: 60px 40px;
   display: flex;
   flex-direction: column;
@@ -55,7 +63,7 @@ body {
 
 .brand-header h1 {
   font-size: 32px;
-  font-weight: 700;
+  font-weight: 800;
   margin-bottom: 10px;
   letter-spacing: -0.5px;
 }
@@ -65,7 +73,7 @@ body {
   font-size: 14px;
 }
 
-/* Gráficos Simulados */
+/* Gráficos */
 .charts-area {
   display: flex;
   gap: 20px;
@@ -84,7 +92,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  backdrop-filter: blur(4px);
 }
 
 .badge {
@@ -95,16 +102,12 @@ body {
   background: rgba(255, 255, 255, 0.1);
   padding: 4px 8px;
   border-radius: 20px;
-  color: #4ade80; /* Verde */
+  color: #4ade80;
   font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 4px;
 }
 
 .badge.blue { color: #60a5fa; }
 
-/* Gráfico de Barras (Simulando as cores da imagem) */
 .bars {
   display: flex;
   align-items: flex-end;
@@ -114,25 +117,15 @@ body {
   gap: 6px;
 }
 
-.bar {
-  width: 100%;
-  border-radius: 4px 4px 0 0;
-}
-
-/* Cores específicas das barras */
+.bar { width: 100%; border-radius: 4px 4px 0 0; }
 .bar:nth-child(1) { background: #3b82f6; height: 30%; }
 .bar:nth-child(2) { background: #6366f1; height: 50%; }
 .bar:nth-child(3) { background: #8b5cf6; height: 70%; }
-.bar:nth-child(4) { background: #ec4899; height: 90%; } /* Rosa */
+.bar:nth-child(4) { background: #ec4899; height: 90%; }
 
-/* Gráfico de Linha */
-.line-svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
+.line-svg { width: 100%; height: 100%; overflow: visible; }
 
-/* Estatísticas Inferiores */
+/* Estatísticas */
 .stats-row {
   display: flex;
   justify-content: space-around;
@@ -140,20 +133,9 @@ body {
   padding-top: 30px;
 }
 
-.stat-item {
-  text-align: center;
-}
-
-.stat-item h3 {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
-.stat-item p {
-  font-size: 12px;
-  color: #94a3b8;
-}
+.stat-item { text-align: center; }
+.stat-item h3 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.stat-item p { font-size: 12px; color: #94a3b8; }
 
 /* --- LADO DIREITO (Formulário) --- */
 .right-panel {
@@ -163,22 +145,23 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow-y: auto; /* Permite rolar se a tela for pequena */
 }
 
 .form-container {
-  max-width: 360px;
+  max-width: 380px;
   margin: 0 auto;
   width: 100%;
 }
 
 .form-container h2 {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   color: #111;
 }
 
-/* Toggle (Sign up / Sign in) */
+/* Toggle */
 .auth-toggle {
   display: flex;
   background: #f1f5f9;
@@ -197,7 +180,6 @@ body {
   cursor: pointer;
   border-radius: 6px;
   font-size: 14px;
-  transition: all 0.2s;
 }
 
 .auth-toggle button.active {
@@ -230,16 +212,10 @@ body {
   color: #334155;
 }
 
-.social-btn:hover {
-  background: #f8fafc;
-}
+.social-btn:hover { background: #f8fafc; }
+.social-btn .icon { font-weight: bold; font-size: 16px; }
 
-.social-btn .icon {
-  font-weight: bold;
-  font-size: 16px;
-}
-
-/* Divisor "or" */
+/* Divisor */
 .divider {
   display: flex;
   align-items: center;
@@ -248,36 +224,24 @@ body {
   font-size: 12px;
 }
 
-.divider::before,
-.divider::after {
+.divider::before, .divider::after {
   content: "";
   flex: 1;
   height: 1px;
   background: #e2e8f0;
 }
-
-.divider span {
-  padding: 0 10px;
-}
+.divider span { padding: 0 10px; }
 
 /* Inputs */
-.row-inputs {
-  display: flex;
-  gap: 12px;
-}
+.row-inputs { display: flex; gap: 12px; }
+.row-inputs .input-group { flex: 1; }
 
-.row-inputs .input-group {
-  flex: 1;
-}
-
-.input-group {
-  margin-bottom: 16px;
-}
+.input-group { margin-bottom: 15px; }
 
 .input-group label {
   display: block;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   color: #475569;
   margin-bottom: 6px;
 }
@@ -290,6 +254,8 @@ body {
   font-size: 14px;
   outline: none;
   color: #111;
+  background-color: #ffffff;
+  transition: all 0.2s;
 }
 
 .input-group input:focus {
@@ -297,49 +263,25 @@ body {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-/* Dicas de senha */
-.password-hints {
-  display: flex;
-  gap: 10px;
-  margin-top: 8px;
-  font-size: 10px;
-  color: #94a3b8;
+/* Autofill fix */
+.input-group input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    -webkit-text-fill-color: #111 !important;
 }
 
-.password-hints span {
-  position: relative;
-  padding-bottom: 4px;
-}
-
-.password-hints span::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: #e2e8f0;
-  border-radius: 2px;
-}
-
-/* Termos e Botão Submit */
-.terms-text {
-  font-size: 11px;
-  color: #64748b;
-  margin-bottom: 20px;
-  line-height: 1.5;
-}
-
-.terms-text a {
-  color: #2563eb;
-  text-decoration: none;
-  font-weight: 500;
+.error-message {
+  color: #ef4444;
+  background: #fef2f2;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 15px;
 }
 
 .submit-btn {
   width: 100%;
   padding: 14px;
-  background: #1e3a8a; /* Azul escuro do botão */
+  background: #1e3a8a;
   color: white;
   border: none;
   border-radius: 8px;
@@ -347,58 +289,59 @@ body {
   font-size: 15px;
   cursor: pointer;
   transition: background 0.2s;
+  margin-top: 10px;
 }
 
-.submit-btn:hover {
-  background: #172554;
+.submit-btn:hover { background: #172554; }
+.submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+/* --- DASHBOARD (Pós Login) --- */
+.dashboard { width: 100%; min-height: 100vh; background: #f5f7fa; }
+
+.topbar {
+  background: white;
+  padding: 20px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #D9E2EC;
 }
 
-.submit-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.error-message {
-  color: #ef4444;
-  font-size: 12px;
-  margin-bottom: 10px;
-}
-
-/* Mobile Switch */
-.mobile-switch {
-  display: none;
-  text-align: center;
-  margin-top: 20px;
-  font-size: 14px;
-  color: #64748b;
-}
-
-.mobile-switch button {
-  background: none;
+.topbar h2 { color: #1769AA; }
+.logout-btn {
   border: none;
-  color: #2563eb;
-  font-weight: 600;
+  background: #FDECEC;
+  color: #B42318;
+  padding: 10px 18px;
+  border-radius: 8px;
   cursor: pointer;
-  padding-left: 4px;
+  font-weight: 600;
 }
+
+.welcome {
+  max-width: 1100px;
+  margin: 60px auto;
+  padding: 24px;
+}
+
+.welcome span { color: #627D98; }
+.welcome h1 { font-size: 32px; margin: 12px 0; }
+
+.user-card {
+  background: white;
+  padding: 25px;
+  margin-top: 30px;
+  border-radius: 12px;
+  border: 1px solid #D9E2EC;
+}
+.user-card p { margin: 12px 0; color: #627D98; }
 
 /* Responsividade */
-@media (max-width: 768px) {
+@media (max-width: 850px) {
   .auth-card-wrapper {
     flex-direction: column;
     height: auto;
-    max-width: 450px;
   }
-
-  .left-panel {
-    display: none; /* Esconde o painel azul no celular */
-  }
-
-  .right-panel {
-    padding: 40px 30px;
-  }
-
-  .mobile-switch {
-    display: block;
-  }
+  .left-panel { display: none; }
+  .right-panel { padding: 40px 30px; }
 }
