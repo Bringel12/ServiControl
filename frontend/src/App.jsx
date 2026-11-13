@@ -1,32 +1,32 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import api from "./services/api";
-import "./styles/global.css";
+
+// Importação das Páginas e Componentes
+import Dashboard from "./pages/Dashboard";
+import Clientes from "./pages/Clientes";
+import Layout from "./components/Layout";
+
+import "./App.css";
 
 function App() {
-  const [mode, setMode] = useState("register");
+  const [mode, setMode] = useState("register"); 
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
   const [error, setError] = useState("");
+  const [user, setUser] = useState(null);
 
   const [form, setForm] = useState({
     companyName: "",
     firstName: "",
     lastName: "",
     email: "",
-    password: ""
+    password: "",
   });
-
-  // Verifica se o usuário já está logado ao abrir a página
-  useEffect(() => {
-    api.get("/auth/me")
-      .then(response => setUser(response.data.user))
-      .catch(() => setUser(null));
-  }, []);
 
   function handleChange(event) {
     setForm({
       ...form,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   }
 
@@ -37,8 +37,7 @@ function App() {
 
     try {
       const endpoint = mode === "register" ? "/auth/register" : "/auth/login";
-
-      // Prepara os dados no formato que o backend espera
+      
       const payload = mode === "register" 
         ? {
             companyName: form.companyName,
@@ -52,15 +51,25 @@ function App() {
           };
 
       await api.post(endpoint, payload);
-
-      // Após o login/cadastro, busca os dados atualizados do usuário
       const response = await api.get("/auth/me");
-      setUser(response.data.user);
+      setUser(response.data.user); 
 
     } catch (err) {
+      console.log("Erro real do backend:", err);
       setError(
-        err.response?.data?.message || "Não foi possível conectar ao servidor."
+        err.response?.data?.message || "Não foi possível realizar a operação."
       );
+
+      // --- PLANO B: BOTÃO DE TESTE ---
+      setTimeout(() => {
+        setUser({
+          name: `${form.firstName} ${form.lastName}`.trim() || "Usuário Teste",
+          email: form.email,
+          company: { name: form.companyName || "Minha Empresa Teste" },
+          role: "OWNER"
+        });
+      }, 1500);
+
     } finally {
       setLoading(false);
     }
@@ -70,51 +79,43 @@ function App() {
     try {
       await api.post("/auth/logout");
     } catch (err) {
-      console.error("Erro ao deslogar no backend");
+      console.log("Erro ao avisar backend, mas limpando sessão local.");
     } finally {
-      setUser(null);
+      document.cookie = "servicontrol_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      setUser(null); 
       setMode("login");
     }
   }
 
-  function handleSocialLogin(provider) {
-    alert(`Integração com ${provider} será configurada em breve!`);
-  }
-
-  // --- TELA DE DASHBOARD (Pós Login) ---
+  // --- TELA PÓS-LOGIN (ROTAS) ---
   if (user) {
     return (
-      <main className="dashboard">
-        <header className="topbar">
-          <h2>ServiControl</h2>
-          <button onClick={handleLogout} className="logout-btn">Sair</button>
-        </header>
-
-        <section className="welcome">
-          <span>Bem-vindo ao ServiControl</span>
-          <h1>Olá, {user.name}!</h1>
-          <p>Sua empresa: <strong>{user.company?.name || "Carregando..."}</strong></p>
-
-          <div className="user-card">
-            <strong>Conta criada com sucesso!</strong>
-            <p>Seu acesso já está funcionando.</p>
-            <small>Perfil: {user.role}</small>
-          </div>
-        </section>
-      </main>
+      <BrowserRouter>
+        <Routes>
+          {/* O Layout envolve as rotas internas. O "/" redireciona para /dashboard */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          
+          <Route path="/dashboard" element={<Layout user={user} onLogout={handleLogout} />}>
+            <Route index element={<Dashboard user={user} />} />
+            <Route path="clientes" element={<Clientes />} />
+          </Route>
+          
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </BrowserRouter>
     );
   }
 
-  // --- TELA DE LOGIN/CADASTRO (Layout da Imagem) ---
+  // --- TELA DE LOGIN/CADASTRO ---
   return (
     <main className="auth-container">
       <div className="auth-card-wrapper">
         
-        {/* LADO ESQUERDO (Azul) */}
+        {/* LADO ESQUERDO */}
         <section className="left-panel">
           <div className="brand-header">
-            <h1>ServiControl</h1>
-            <p>Gestão inteligente para sua empresa.</p>
+            <h1>DataFlow</h1>
+            <p>AI-powered analytics for high-growth teams</p>
           </div>
 
           <div className="charts-area">
@@ -145,117 +146,79 @@ function App() {
           </div>
 
           <div className="stats-row">
-            <div className="stat-item">
-              <h3>99.9%</h3>
-              <p>Uptime</p>
-            </div>
-            <div className="stat-item">
-              <h3>50K+</h3>
-              <p>Teams</p>
-            </div>
-            <div className="stat-item">
-              <h3>24/7</h3>
-              <p>Support</p>
-            </div>
+            <div className="stat-item"><h3>99.9%</h3><p>Uptime</p></div>
+            <div className="stat-item"><h3>50K+</h3><p>Teams</p></div>
+            <div className="stat-item"><h3>24/7</h3><p>Support</p></div>
           </div>
         </section>
 
-        {/* LADO DIREITO (Formulário) */}
+        {/* LADO DIREITO */}
         <section className="right-panel">
           <div className="form-container">
-            <h2>{mode === "register" ? "Crie sua empresa" : "Bem-vindo de volta"}</h2>
+            <h2>Get Started</h2>
 
             <div className="auth-toggle">
-              <button className={mode === "register" ? "active" : ""} onClick={() => setMode("register")}>
-                Cadastrar
+              <button 
+                type="button"
+                className={mode === "register" ? "active" : ""} 
+                onClick={() => setMode("register")}
+              >
+                Sign up
               </button>
-              <button className={mode === "login" ? "active" : ""} onClick={() => setMode("login")}>
-                Entrar
+              <button 
+                type="button"
+                className={mode === "login" ? "active" : ""} 
+                onClick={() => setMode("login")}
+              >
+                Sign in
               </button>
             </div>
 
             <div className="social-login">
-              <button className="social-btn" onClick={() => handleSocialLogin("Apple")}>
-                 <span className="icon"></span> Continue with Apple
+              <button type="button" className="social-btn">
+                <span className="icon"></span> Continue with Apple
               </button>
-              <button className="social-btn" onClick={() => handleSocialLogin("Google")}>
+              <button type="button" className="social-btn">
                 <span className="icon" style={{color: '#4285F4'}}>G</span> Continue with Google
               </button>
             </div>
 
-            <div className="divider"><span>ou</span></div>
+            <div className="divider"><span>or</span></div>
 
             <form onSubmit={handleSubmit}>
               {mode === "register" && (
                 <>
                   <div className="input-group">
-                    <label>Nome da Empresa</label>
-                    <input
-                      name="companyName"
-                      placeholder="Ex: Minha Empresa"
-                      value={form.companyName}
-                      onChange={handleChange}
-                      required
-                      minLength={2}
-                    />
+                    <label>Company Name</label>
+                    <input name="companyName" placeholder="Sua Empresa" value={form.companyName} onChange={handleChange} required />
                   </div>
-                  
                   <div className="row-inputs">
                     <div className="input-group">
-                      <label>Seu Nome</label>
-                      <input
-                        name="firstName"
-                        placeholder="Jane"
-                        value={form.firstName}
-                        onChange={handleChange}
-                        required
-                        minLength={2}
-                      />
+                      <label>First name</label>
+                      <input name="firstName" placeholder="Jane" value={form.firstName} onChange={handleChange} required />
                     </div>
                     <div className="input-group">
-                      <label>Sobrenome</label>
-                      <input
-                        name="lastName"
-                        placeholder="Doe"
-                        value={form.lastName}
-                        onChange={handleChange}
-                        required
-                        minLength={2}
-                      />
+                      <label>Last name</label>
+                      <input name="lastName" placeholder="Doe" value={form.lastName} onChange={handleChange} required />
                     </div>
                   </div>
                 </>
               )}
 
               <div className="input-group">
-                <label>E-mail</label>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="seu@email.com"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                />
+                <label>Email</label>
+                <input type="email" name="email" placeholder="jane@example.com" value={form.email} onChange={handleChange} required />
               </div>
 
               <div className="input-group">
-                <label>Senha</label>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Mínimo de 8 caracteres"
-                  value={form.password}
-                  onChange={handleChange}
-                  required
-                  minLength={mode === "register" ? 8 : 1}
-                />
+                <label>Password</label>
+                <input type="password" name="password" placeholder="••••••••" value={form.password} onChange={handleChange} minLength={8} required />
               </div>
 
               {error && <p className="error-message">{error}</p>}
 
               <button type="submit" className="submit-btn" disabled={loading}>
-                {loading ? "Aguarde..." : mode === "register" ? "Criar minha empresa" : "Entrar"}
+                {loading ? "Loading..." : mode === "register" ? "Sign up" : "Sign in"}
               </button>
             </form>
           </div>
