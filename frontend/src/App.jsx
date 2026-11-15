@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import api from "./services/api";
-
-// Importação das Páginas e Componentes
 import Dashboard from "./pages/Dashboard";
 import Clientes from "./pages/Clientes";
-// 👇 ADICIONADO AQUI
 import Financeiro from "./pages/Financeiro"; 
-// 👆
+import Servicos from "./pages/Servicos";
 import Layout from "./components/Layout";
 
 import "./App.css";
@@ -93,23 +90,30 @@ function App() {
   // --- TELA PÓS-LOGIN (ROTAS) ---
   if (user) {
     return (
-      <BrowserRouter>
-        <Routes>
-          {/* O Layout envolve as rotas internas. O "/" redireciona para /dashboard */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          
-          <Route path="/dashboard" element={<Layout user={user} onLogout={handleLogout} />}>
-            <Route index element={<Dashboard user={user} />} />
-            <Route path="clientes" element={<Clientes />} />
-            
-            {/* 👇 ADICIONADO AQUI */}
-            <Route path="financeiro" element={<Financeiro />} />
-            {/* 👆 */}
-          </Route>
-          
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
-      </BrowserRouter>
+ 
+<BrowserRouter>
+  <Routes>
+    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+    <Route
+      path="/dashboard"
+      element={<Layout user={user} onLogout={handleLogout} />}
+    >
+      <Route index element={<Dashboard user={user} />} />
+
+      <Route path="clientes" element={<Clientes />} />
+
+      <Route path="financeiro" element={<Financeiro />} />
+
+      {/* Página de Serviços */}
+      <Route path="servicos" element={<Servicos />} />
+
+    </Route>
+
+    <Route path="*" element={<Navigate to="/dashboard" replace />} />
+  </Routes>
+</BrowserRouter>
+
     );
   }
 
