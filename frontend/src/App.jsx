@@ -5,6 +5,9 @@ import api from "./services/api";
 // Importação das Páginas e Componentes
 import Dashboard from "./pages/Dashboard";
 import Clientes from "./pages/Clientes";
+// 👇 ADICIONADO AQUI
+import Financeiro from "./pages/Financeiro"; 
+// 👆
 import Layout from "./components/Layout";
 
 import "./App.css";
@@ -98,6 +101,10 @@ function App() {
           <Route path="/dashboard" element={<Layout user={user} onLogout={handleLogout} />}>
             <Route index element={<Dashboard user={user} />} />
             <Route path="clientes" element={<Clientes />} />
+            
+            {/* 👇 ADICIONADO AQUI */}
+            <Route path="financeiro" element={<Financeiro />} />
+            {/* 👆 */}
           </Route>
           
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
