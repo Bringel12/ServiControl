@@ -220,3 +220,65 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* Área das ações */
+.actions-cell {
+  position: relative;
+  text-align: center;
+}
+
+.btn-action {
+  border: none;
+  background: transparent;
+  font-size: 23px;
+  cursor: pointer;
+  color: #64748b;
+  padding: 5px 12px;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.btn-action:hover {
+  background: #f1f5f9;
+  color: #1769AA;
+}
+
+/* Menu dos três pontinhos */
+.actions-menu {
+  position: absolute;
+  top: 35px;
+  right: 15px;
+  width: 175px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 6px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.actions-menu button {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 11px 10px;
+  text-align: left;
+  font-size: 13px;
+  color: #334155;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.actions-menu button:hover {
+  background: #f1f5f9;
+}
+
+.actions-menu .delete-option {
+  color: #dc2626;
+}
+
+.actions-menu .delete-option:hover {
+  background: #fef2f2;
+}
